@@ -2,7 +2,7 @@ using System;
 using Xunit;
 using System.Xml;
 using System.Net;
-using System.Globalization;
+using System.Text.Json;
 using System.Threading;
 
 namespace TestMacroscop
@@ -16,7 +16,7 @@ namespace TestMacroscop
             DateTime localTimeDate = DateTime.UtcNow;
             
             //Act
-            Thread.Sleep(20 * 1000);
+            //Thread.Sleep(20 * 1000);
             WebClient client = new();
             string request = client.DownloadString("http://demo.macroscop.com:8080/command?type=gettime&login=root&password=");
             int index = request.IndexOf("<?xml");
@@ -40,7 +40,28 @@ namespace TestMacroscop
         [Fact]
         public void DataTimeCheckJson()
         {
+            //Arrange
+            DateTime localTimeDate = DateTime.UtcNow;
 
+            //Act
+            //Thread.Sleep(20 * 1000);
+            WebClient client = new();
+            string request = client.DownloadString("http://demo.macroscop.com:8080/command?type=gettime&login=root&password=&responsetype=json");
+            int index = request.IndexOf("\r\n\r\n");
+            Console.WriteLine(index);
+            string xml = request.Substring(index);
+            JsonDocument json = JsonDocument.Parse(xml);
+            DateTime serverTimeDate = DateTime.Parse(json.RootElement.ToString());
+
+            //Assert
+            if ((serverTimeDate - localTimeDate).Seconds <= 15)
+            {
+                Assert.True(true);
+            }
+            else
+            {
+                Assert.True(false);
+            }
         }
     }
 }
