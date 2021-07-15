@@ -9,6 +9,17 @@ namespace TestMacroscop
     {
         string link = "http://demo.macroscop.com:8080/command?type=gettime&login=root&password=&responsetype=json";
 
+        public TimeSpan DifferenceTime(DateTime localTime)
+        {
+            WebClient client = new();
+            string request = client.DownloadString(link);
+            int index = request.IndexOf("\r\n\r\n");
+            string jsonText = request.Substring(index);
+            JsonDocument json = JsonDocument.Parse(jsonText);
+            DateTime serverTimeDate = DateTime.Parse(json.RootElement.ToString());
+            return serverTimeDate - localTime;
+        }
+
         [Fact]
         public void TestDifferenceTimeMore15Seconds()
         {
@@ -16,17 +27,10 @@ namespace TestMacroscop
             DateTime localTimeDate = DateTime.UtcNow.AddSeconds(16);
 
             //Act
-            WebClient client = new();
-            string request = client.DownloadString(link);
-            int index = request.IndexOf("\r\n\r\n");
-            string jsonText = request.Substring(index);
-            JsonDocument json = JsonDocument.Parse(jsonText);
-            DateTime serverTimeDate = DateTime.Parse(json.RootElement.ToString());
-            TimeSpan time = serverTimeDate - localTimeDate;
-            int differenceSeconds = Math.Abs(time.Days * 24 * 60 * 60 + time.Hours * 60 * 60 + time.Minutes * 60 + time.Seconds);
+            TimeSpan time = DifferenceTime(localTimeDate);
 
             //Assert
-            Assert.True(differenceSeconds < 15, $"Разница между временем сервера и локальным = {differenceSeconds} секунд и {Math.Abs(time.Milliseconds)} миллисекунд");
+            Assert.True(Math.Abs(time.TotalSeconds) < 15, $"Разница между временем сервера и локальным = {Math.Abs(time.Seconds)} секунд и {Math.Abs(time.Milliseconds)} миллисекунд");
 
         }
 
@@ -37,13 +41,7 @@ namespace TestMacroscop
             DateTime localTimeDate = DateTime.UtcNow.AddSeconds(13);
 
             //Act
-            WebClient client = new();
-            string request = client.DownloadString(link);
-            int index = request.IndexOf("\r\n\r\n");
-            string jsonText = request.Substring(index);
-            JsonDocument json = JsonDocument.Parse(jsonText);
-            DateTime serverTimeDate = DateTime.Parse(json.RootElement.ToString());
-            TimeSpan time = serverTimeDate - localTimeDate;
+            TimeSpan time = DifferenceTime(localTimeDate);
 
             //Assert
             Assert.True(Math.Abs(time.Seconds) < 15, $"Разница между временем сервера и локальным = {Math.Abs(time.Seconds)} секунд и {Math.Abs(time.Milliseconds)} миллисекунд");
