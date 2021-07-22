@@ -2,6 +2,7 @@ using System;
 using Xunit;
 using System.Net;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace TestMacroscop
 {
@@ -23,6 +24,7 @@ namespace TestMacroscop
         [Fact]
         public void TestDifferenceTimeMore15Seconds()
         {
+            
             //Arrange
             DateTime localTimeDate = DateTime.UtcNow.AddSeconds(16);
 
@@ -30,8 +32,9 @@ namespace TestMacroscop
             TimeSpan time = DifferenceTime(localTimeDate);
 
             //Assert
-            Assert.True(Math.Abs(time.TotalSeconds) < 15, $"Ðàçíèöà ìåæäó âðåìåíåì ñåðâåðà è ëîêàëüíûì = {Math.Abs(time.Seconds)} ñåêóíä è {Math.Abs(time.Milliseconds)} ìèëëèñåêóíä");
+            Assert.True(Math.Abs(time.TotalSeconds) < 15, $"Ð Ð°Ð·Ð½Ð¸Ñ†Ð° Ð¼ÐµÐ¶Ð´Ñƒ Ð²Ñ€ÐµÐ¼ÐµÐ½ÐµÐ¼ ÑÐµÑ€Ð²ÐµÑ€Ð° Ð¸ Ð»Ð¾ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¼ = {Math.Abs(time.Seconds)} ÑÐµÐºÑƒÐ½Ð´ Ð¸ {Math.Abs(time.Milliseconds)} Ð¼Ð¸Ð»Ð»Ð¸ÑÐµÐºÑƒÐ½Ð´");
 
+            
         }
 
         [Fact]
@@ -44,7 +47,7 @@ namespace TestMacroscop
             TimeSpan time = DifferenceTime(localTimeDate);
 
             //Assert
-            Assert.True(Math.Abs(time.Seconds) < 15, $"Ðàçíèöà ìåæäó âðåìåíåì ñåðâåðà è ëîêàëüíûì = {Math.Abs(time.Seconds)} ñåêóíä è {Math.Abs(time.Milliseconds)} ìèëëèñåêóíä");
+            Assert.True(Math.Abs(time.Seconds) < 15, $"Ð Ð°Ð·Ð½Ð¸Ñ†Ð° Ð¼ÐµÐ¶Ð´Ñƒ Ð²Ñ€ÐµÐ¼ÐµÐ½ÐµÐ¼ ÑÐµÑ€Ð²ÐµÑ€Ð° Ð¸ Ð»Ð¾ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¼ = {Math.Abs(time.Seconds)} ÑÐµÐºÑƒÐ½Ð´ Ð¸ {Math.Abs(time.Milliseconds)} Ð¼Ð¸Ð»Ð»Ð¸ÑÐµÐºÑƒÐ½Ð´");
 
         }
 
