@@ -2,7 +2,6 @@ using System;
 using Xunit;
 using System.Net;
 using System.Text.Json;
-using System.Xml.Linq;
 
 namespace TestMacroscop
 {
